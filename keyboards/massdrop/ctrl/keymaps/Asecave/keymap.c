@@ -22,8 +22,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [1] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,            KC_MUTE, _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   KC_MPLY, KC_MSTP, KC_VOLU, \
-        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, _______, _______, _______, _______,   KC_MPRV, KC_MNXT, KC_VOLD, \
-        _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______, _______, \
+        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, _______, _______, _______, _______, _______, _______, _______,   KC_MPRV, KC_MNXT, KC_VOLD, \
+        _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, U_T_AUTO,U_T_AGCR,_______, _______, \
         _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, _______, _______, _______, _______, _______,                              _______, \
         _______, _______, _______,                   _______,                            _______, _______, _______, _______,            _______, _______, _______ \
     ),
@@ -55,6 +55,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint32_t key_timer;
 
     switch (keycode) {
+		case KC_A:
+			if (record->event.pressed) {
+				if (MODS_ALT) {
+					register_code16(ALGR(KC_Q));
+				} else {
+					register_code16(KC_A);
+				}
+			} else {
+				unregister_code16(ALGR(KC_Q));
+				unregister_code(KC_Q);
+				unregister_code16(KC_A);
+			}
+			return false;
+		case KC_U:
+			if (record->event.pressed) {
+				if (MODS_ALT) {
+					register_code16(ALGR(KC_Y));
+				} else {
+					register_code16(KC_U);
+				}
+			} else {
+				unregister_code16(ALGR(KC_Y));
+				unregister_code(KC_Y);
+				unregister_code16(KC_U);
+			}
+			return false;
+		case KC_O:
+			if (record->event.pressed) {
+				if (MODS_ALT) {
+					register_code16(ALGR(KC_P));
+				} else {
+					register_code16(KC_O);
+				}
+			} else {
+				unregister_code16(ALGR(KC_P));
+				unregister_code(KC_P);
+				unregister_code16(KC_O);
+			}
+			return false;
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
                 TOGGLE_FLAG_AND_PRINT(usb_extra_manual, "USB extra port manual mode");
