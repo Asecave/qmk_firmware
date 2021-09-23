@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "print.h"
 
 enum ctrl_keycodes {
     U_T_AUTO = SAFE_RANGE, //USB Extra Port Toggle Auto Detect / Always Active
@@ -17,7 +18,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,   KC_DEL,  KC_END,  KC_PGDN, \
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT, \
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,                              KC_UP, \
-        KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,                             KC_RALT, MO(1),   KC_APP,  KC_RCTL,            KC_LEFT, KC_DOWN, KC_RGHT \
+        KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,                             LT(2, KC_RALT), MO(1),   KC_APP,  KC_RCTL,            KC_LEFT, KC_DOWN, KC_RGHT \
     ),
     [1] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,            KC_MUTE, _______, _______, \
@@ -27,16 +28,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, _______, _______, _______, _______, _______,                              _______, \
         _______, _______, _______,                   _______,                            _______, _______, _______, _______,            _______, _______, _______ \
     ),
-    /*
-    [X] = LAYOUT(
+    [2] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,            _______, _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, NK_TOGG, _______, _______, _______, _______, _______,                              _______, \
+        _______, _______, _______,RALT(KC_5),_______,_______, _______,RALT(KC_Y),_______,RALT(KC_P),_______,_______,_______, X(0x026A),   _______, _______, _______, \
+        _______,RALT(KC_Q),RALT(KC_S),_______,_______,_______,_______, _______, _______, _______, _______, _______, _______, \
+        KC_LSFT, _______, _______, _______, _______, _______, NK_TOGG, _______, _______, _______, _______, KC_RSFT,                              _______, \
         _______, _______, _______,                   _______,                            _______, _______, _______, _______,            _______, _______, _______ \
     ),
-    */
 };
 
 // Runs just one time when the keyboard initializes.
@@ -55,45 +54,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint32_t key_timer;
 
     switch (keycode) {
-		case KC_A:
-			if (record->event.pressed) {
-				if (MODS_ALT) {
-					register_code16(ALGR(KC_Q));
-				} else {
-					register_code16(KC_A);
-				}
-			} else {
-				unregister_code16(ALGR(KC_Q));
-				unregister_code(KC_Q);
-				unregister_code16(KC_A);
-			}
-			return false;
-		case KC_U:
-			if (record->event.pressed) {
-				if (MODS_ALT) {
-					register_code16(ALGR(KC_Y));
-				} else {
-					register_code16(KC_U);
-				}
-			} else {
-				unregister_code16(ALGR(KC_Y));
-				unregister_code(KC_Y);
-				unregister_code16(KC_U);
-			}
-			return false;
-		case KC_O:
-			if (record->event.pressed) {
-				if (MODS_ALT) {
-					register_code16(ALGR(KC_P));
-				} else {
-					register_code16(KC_O);
-				}
-			} else {
-				unregister_code16(ALGR(KC_P));
-				unregister_code(KC_P);
-				unregister_code16(KC_O);
-			}
-			return false;
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
                 TOGGLE_FLAG_AND_PRINT(usb_extra_manual, "USB extra port manual mode");
@@ -162,4 +122,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         default:
             return true; //Process all other keycodes normally
     }
+	
+	
 }
